@@ -2,11 +2,9 @@
 
 **✅ 기존 Spring의 문제점 (Spring Framework 기준)**
 
-🔹 문제 1: 수동 설정이 많다 = 설정을 개발자가 직접 다 해야 함
+##### 🔹 문제 1: 수동 설정이 많다 = 설정을 개발자가 직접 다 해야 함
 
-예) DB 연결하려면?
-
-기존 Spring에서는 아래와 같이 XML에 **모든 bean과 속성을 직접 정의**해야 했어요.
+<sup>기존 Spring에서는 아래와 같이 XML에 **모든 bean과 속성을 직접 정의**해야 했어요.</sup>
 
 ```xml
 <!-- applicationContext.xml -->
@@ -23,68 +21,66 @@
 </bean>
 ```
 
-✔ 이렇게 일일이 작성해야 했던 항목들:
-- 데이터베이스 커넥션 정보
-- JPA 설정
-- 트랜잭션 관리자
-- 뷰 리졸버
-- 컴포넌트 스캔 위치  
-→ **항목이 많고, 중복이 많으며, 실수하기 쉬움**
+<sup>✔ 이렇게 일일이 작성해야 했던 항목들:</sup><br>
+<sup> 데이터베이스 커넥션 정보</sup><br>
+<sup> JPA 설정</sup><br>
+<sup> 트랜잭션 관리자</sup><br>
+<sup> 뷰 리졸버</sup><br>
+<sup> 컴포넌트 스캔 위치</sup><br> 
+<sup> → **항목이 많고, 중복이 많으며, 실수하기 쉬움**</sup><br>
 
 ---
 
-🔹 문제 2: 외부 WAS 설치 + war 배포 필수
+##### 🔹 문제 2: 외부 WAS 설치 + war 배포 필수
 
-기존 Spring 프로젝트는 보통 **war 파일로 빌드**해서 **Tomcat에 수동 배포**해야 했어요.
+<sup>기존 Spring 프로젝트는 보통 **war 파일로 빌드**해서 **Tomcat에 수동 배포**해야 했어요.</sup><br>
 
-1. Gradle/Maven으로 `war` 빌드  
-2. 로컬 또는 운영 서버의 Tomcat에 `/webapps` 폴더에 war 파일 복사  
-3. `server.xml`, `context.xml` 등 Tomcat 설정 수동 작성  
-4. 서버를 재시작하거나 hot reload 구성
+<sup>Gradle/Maven으로 `war` 빌드</sup><br>
+<sup>로컬 또는 운영 서버의 Tomcat에 `/webapps` 폴더에 war 파일 복사</sup><br>
+<sup>`server.xml`, `context.xml` 등 Tomcat 설정 수동 작성</sup><br>
+<sup>서버를 재시작하거나 hot reload 구성</sup><br>
 
-✔ 즉, Spring Framework는 **애플리케이션과 서버가 분리되어 있음**  
-→ 개발자 입장에서 **배포 작업이 반복적으로 필요하고 느림**
+<sup>✔ 즉, Spring Framework는 **애플리케이션과 서버가 분리되어 있음**</sup><br>
+<sup>→ 개발자 입장에서 **배포 작업이 반복적으로 필요하고 느림**</sup><br>
 
 ---
+##### 🔹 [질문 1] 외부 WAS 설치 + war 배포가 뭔 뜻인지 모르겠어요
 
-**🔹 [질문 1] 외부 WAS 설치 + war 배포가 뭔 뜻인지 모르겠어요**
+<sup>👉 용어부터 설명할게요:</sup><br>
+<sup>WAS: Web Application Server, 웹 어플리케이션을 실행해주는 서버</sup><br>
+<sup>대표적인 게 Tomcat (Java 진영에서 거의 기본)</sup><br>
 
-👉 용어부터 설명할게요:
-- WAS: Web Application Server, 웹 어플리케이션을 실행해주는 서버
-- 대표적인 게 Tomcat (Java 진영에서 거의 기본)
+<sup>🔸 기존 Spring Framework에서는…</sup><br>
+<sup>Spring 코드만 가지고는 웹서버에 띄울 수 없어요.</sup><br>
+<sup>따라서 Tomcat 같은 서버를 별도로 설치하고,</sup><br>
+<sup>거기에 프로젝트를 넣어줘야 합니다.</sup><br>
 
-🔸 기존 Spring Framework에서는…
-- Spring 코드만 가지고는 웹서버에 띄울 수 없어요.
-- 따라서 Tomcat 같은 서버를 별도로 설치하고,
-- 거기에 프로젝트를 넣어줘야 합니다.
+<sup>🔧 실제 작업 순서 (기존 Spring 기준)</sup><br>
+<sup>Spring 프로젝트 코드를 .war 파일로 만든다 → war = 웹 어플리케이션 압축 파일</sup><br>
+<sup>이 war 파일을 Tomcat의 /webapps 폴더에 복사한다.</sup><br>
+<sup>Tomcat의 server.xml, context.xml 등을 수정해 경로 설정한다.</sup><br>
+<sup>Tomcat 서버를 수동으로 껐다 켠다. (또는 설정해서 자동 reload)</sup><br>
 
-🔧 실제 작업 순서 (기존 Spring 기준)
-1. Spring 프로젝트 코드를 .war 파일로 만든다 → war = 웹 어플리케이션 압축 파일
-2. 이 war 파일을 Tomcat의 /webapps 폴더에 복사한다.
-3. Tomcat의 server.xml, context.xml 등을 수정해 경로 설정한다.
-4. Tomcat 서버를 수동으로 껐다 켠다. (또는 설정해서 자동 reload)
+<sup>즉, 서버와 코드가 따로 노는 구조</sup><br>
 
-즉, 서버와 코드가 따로 노는 구조
+<sup>→ Spring은 코드만 있고, 실행하려면 Tomcat이 따로 있어야 함</sup><br>
 
-→ Spring은 코드만 있고, 실행하려면 Tomcat이 따로 있어야 함
-
-🔸 Spring Boot는 어떻게 다르냐?
-- Spring Boot는 tomcat-embed-core 같은 내장 Tomcat 라이브러리를 포함하고 있어서, 코드 안에 서버가 같이 들어 있어요.
-
-- 즉, 별도로 Tomcat을 설치하지 않고도, 바로 실행 가능:
+<sup>🔸 Spring Boot는 어떻게 다르냐?</sup><br>
+<sup>Spring Boot는 tomcat-embed-core 같은 내장 Tomcat 라이브러리를 포함하고 있어서, 코드 안에 서버가 같이 들어 있어요.</sup><br>
+<sup>즉, 별도로 Tomcat을 설치하지 않고도, 바로 실행 가능:</sup><br>
 
 ```bash
 java -jar build/libs/myapp.jar
 ```
-→ 이 jar 파일은 Spring Boot + Tomcat + 내 코드가 모두 들어 있는 실행 가능 패키지예요.
+<sup>→ 이 jar 파일은 Spring Boot + Tomcat + 내 코드가 모두 들어 있는 실행 가능 패키지예요.</sup><br>
 
 ---
 
-**✅ Spring Boot의 개선점**
+##### ✅ Spring Boot의 개선점
 
-✅ 1. 자동 설정 (Auto Configuration)
+<sup>✅ 1. 자동 설정 (Auto Configuration)</sup><br>
 
-Spring Boot는 `@SpringBootApplication` 어노테이션을 통해 아래의 설정을 자동화합니다.
+<sup>Spring Boot는 `@SpringBootApplication` 어노테이션을 통해 아래의 설정을 자동화합니다.</sup><br>
 
 ```java
 @SpringBootApplication
@@ -95,19 +91,19 @@ public class BootJspApplication {
 }
 ```
 
-이 한 줄로 포함되는 설정들:
+<sup>이 한 줄로 포함되는 설정들:</sup><br>
 
-| 내부 구성 요소 | 설명 |
-|----------------|------|
-| `@Configuration` | 자바 기반 설정 클래스 |
-| `@EnableAutoConfiguration` | 클래스패스에 존재하는 라이브러리 기반 자동 설정 수행 |
-| `@ComponentScan` | 현재 패키지 하위의 모든 @Component, @Service, @Controller 탐색 및 등록 |
+<sup>| 내부 구성 요소 | 설명 |</sup><br>
+<sup>|----------------|------|</sup><br>
+<sup>| `@Configuration` | 자바 기반 설정 클래스 |</sup><br>
+<sup>| `@EnableAutoConfiguration` | 클래스패스에 존재하는 라이브러리 기반 자동 설정 수행 |</sup><br>
+<sup>| `@ComponentScan` | 현재 패키지 하위의 모든 @Component, @Service, @Controller 탐색 및 등록 |</sup><br>
 
 ---
 
-예) DB 설정 자동화
+<sup>예) DB 설정 자동화</sup><br>
 
-application.yml
+<sup>application.yml
 ```yaml
 spring:
   datasource:
@@ -119,17 +115,17 @@ spring:
       ddl-auto: update
 ```
 
-→ 별도의 XML 없이 이 설정만으로:
-- `DataSource`, `EntityManagerFactory`, `TransactionManager` 등이 자동으로 생성됨
+<sup>→ 별도의 XML 없이 이 설정만으로:</sup><br>
+<sup>`DataSource`, `EntityManagerFactory`, `TransactionManager` 등이 자동으로 생성됨</sup><br>
 
 ---
 
-✅ 2. 내장 WAS 제공
+<sup>✅ 2. 내장 WAS 제공</sup><br>
 
-Spring Boot는 Tomcat이 **내장 라이브러리**로 포함되어 있기 때문에  
-**외부 Tomcat 설치 없이도 실행 가능**합니다.
+<sup>Spring Boot는 Tomcat이 **내장 라이브러리**로 포함되어 있기 때문에</sup><br>
+<sup>**외부 Tomcat 설치 없이도 실행 가능**합니다.</sup><br>
 
-예) `build.gradle`
+<sup>예) `build.gradle`</sup><br>
 
 ```gradle
 dependencies {
@@ -137,10 +133,10 @@ dependencies {
 }
 ```
 
-→ 위 한 줄을 넣으면, Spring Boot는 `spring-boot-starter-web`에 포함된  
-`tomcat-embed-core` 등 내장 Tomcat 의존성을 자동 추가합니다.
+<sup>→ 위 한 줄을 넣으면, Spring Boot는 `spring-boot-starter-web`에 포함된</sup><br>  
+<sup>`tomcat-embed-core` 등 내장 Tomcat 의존성을 자동 추가합니다.</sup><br>
 
-실행은 이렇게만 하면 됨:
+<sup>실행은 이렇게만 하면 됨:</sup><br>
 
 ```bash
 ./gradlew bootRun
@@ -150,27 +146,27 @@ java -jar build/libs/myapp.jar
 
 ---
 
-✔ 결과적으로:
+<sup>✔ 결과적으로:</sup><br>
 
-| 항목 | Spring | Spring Boot |
-|------|--------|-------------|
-| Tomcat 설치 | 수동 설치 필요 | 불필요 (내장됨) |
-| 배포 방식 | war 빌드 후 복사 | jar 실행 가능 |
-| 설정 파일 | XML 기반 | yml/properties 기반 |
-| 개발 속도 | 느림 | 빠름 (자동 설정) |
+<sup>| 항목 | Spring | Spring Boot |</sup><br>
+<sup>|------|--------|-------------|</sup><br>
+<sup>| Tomcat 설치 | 수동 설치 필요 | 불필요 (내장됨) |</sup><br>
+<sup>| 배포 방식 | war 빌드 후 복사 | jar 실행 가능 |</sup><br>
+<sup>| 설정 파일 | XML 기반 | yml/properties 기반 |</sup><br>
+<sup>| 개발 속도 | 느림 | 빠름 (자동 설정) |</sup><br>
 
 ---
 
-✅ 3. 빌드 자동화
+<sup>✅ 3. 빌드 자동화</sup><br>
 
-Spring Boot는 Gradle(Maven도 가능)을 이용한 빌드 자동화를 지원하며,  
-`spring-boot-gradle-plugin`을 통해 다음을 제공합니다:
+<sup>Spring Boot는 Gradle(Maven도 가능)을 이용한 빌드 자동화를 지원하며,</sup><br>
+<sup>`spring-boot-gradle-plugin`을 통해 다음을 제공합니다:</sup><br>
 
-- `bootRun`: 애플리케이션 실행
-- `bootJar`: 실행 가능한 JAR 생성
-- `bootBuildImage`: 도커 이미지 자동 생성
+<sup>`bootRun`: 애플리케이션 실행</sup><br>
+<sup>`bootJar`: 실행 가능한 JAR 생성</sup><br>
+<sup>`bootBuildImage`: 도커 이미지 자동 생성</sup><br>
 
-Gradle 설정 예시
+<sup>Gradle 설정 예시</sup><br>
 
 ```gradle
 plugins {
@@ -179,61 +175,63 @@ plugins {
 }
 ```
 
-✔ 위 설정만 하면 의존성 관리, 빌드, 실행 모두 자동화됨
+<sup>✔ 위 설정만 하면 의존성 관리, 빌드, 실행 모두 자동화됨</sup><br>
 
 ---
 
-**✅ Spring Boot에서 Docker 반드시 필요한 상황**
+##### ✅ Spring Boot에서 Docker 반드시 필요한 상황
 
-🟠 상황 1: 운영 서버에 직접 배포해야 할 때
+<sup>🟠 상황 1: 운영 서버에 직접 배포해야 할 때</sup><br>
 
-예시
-- 회사 리눅스 서버에 올려야 한다거나
-- 클라우드(GCP, AWS EC2) 서버에 배포해야 할 때
+<sup>예시</sup><br>
+<sup>회사 리눅스 서버에 올려야 한다거나</sup><br>
+<sup>클라우드(GCP, AWS EC2) 서버에 배포해야 할 때</sup><br>
 
-왜 Docker가 필요함?
-- 내 개발 환경(JDK, 포트 설정 등)을 그대로 묶어서 서버에 보내야 함
-- 서버에 Java가 깔려있는지, 설정이 맞는지 하나하나 확인할 수 없음
+<sup>왜 Docker가 필요함?</sup><br>
+<sup>내 개발 환경(JDK, 포트 설정 등)을 그대로 묶어서 서버에 보내야 함</sup><br>
+<sup>서버에 Java가 깔려있는지, 설정이 맞는지 하나하나 확인할 수 없음</sup><br>
 
-어떻게 하나요?
-1. `Dockerfile`을 작성해서
-2. 내 코드를 포함한 실행 환경을 **컨테이너 이미지로 만듦**
-3. 서버에서 `docker run`으로 실행
-
----
-
-🟠 상황 2: 팀원들과 개발 환경을 맞추고 싶을 때
-
-예시
-- 유미님은 Java 17, 팀원은 Java 11 → 빌드 에러
-- 내 PC에는 MySQL 8.0, 다른 팀원은 SQLite → 동작 안 함
-
-Docker를 쓰면?
-- 팀원이 코드 내려받고 `docker-compose up`만 하면
-- Java 버전, MySQL 버전, 포트 설정까지 완전 똑같아짐  
-→ **환경 통일**, 에러 줄어듦
+<sup>어떻게 하나요?</sup><br>
+<sup>`Dockerfile`을 작성해서</sup><br>
+<sup>내 코드를 포함한 실행 환경을 **컨테이너 이미지로 만듦**</sup><br>
+<sup>서버에서 `docker run`으로 실행</sup><br>
 
 ---
 
-🟠 상황 3: 여러 개의 서비스를 동시에 실행하고 싶을 때
+<sup>🟠 상황 2: 팀원들과 개발 환경을 맞추고 싶을 때</sup><br>
 
-예시
-- Spring Boot 백엔드
-- React 프론트엔드
-- MySQL 데이터베이스  
-→ 이걸 **하나의 프로젝트처럼 동시에 실행하고 싶을 때**
+<sup>예시</sup><br>
+<sup>유미님은 Java 17, 팀원은 Java 11 → 빌드 에러</sup><br>
+<sup>내 PC에는 MySQL 8.0, 다른 팀원은 SQLite → 동작 안 함</sup><br>
 
-Docker로 어떻게 하나요?
-- `docker-compose.yml` 하나에 3개 컨테이너 정의
-- `docker-compose up` 한 줄로 백+프론트+DB 실행됨
+<sup>Docker를 쓰면?</sup><br>
+<sup>팀원이 코드 내려받고 `docker-compose up`만 하면</sup><br>
+<sup>Java 버전, MySQL 버전, 포트 설정까지 완전 똑같아짐</sup><br>  
+<sup>→ **환경 통일**, 에러 줄어듦</sup><br>
 
 ---
 
-✅ 질문: **왜 React + Spring Boot + MySQL을 하나의 Docker로 묶어야 할까?**
-→ 정답: 이 3개는 독립적인 서버이기 때문에 실행, 연결, 설정을 자동화해서 함께 움직이게 하려는 목적이에요.
+<sup>🟠 상황 3: 여러 개의 서비스를 동시에 실행하고 싶을 때</sup><br>
 
-🎯 상황 설명: 개발 환경에서 필요한 구성
-예를 들어 유미님이 이런 프로젝트를 만든다고 해봐요:
+<sup>예시</sup><br>
+<sup>Spring Boot 백엔드</sup><br>
+<sup>React 프론트엔드</sup><br>
+<sup>MySQL 데이터베이스</sup><br>  
+<sup>→ 이걸 **하나의 프로젝트처럼 동시에 실행하고 싶을 때**</sup><br>
+
+<sup>Docker로 어떻게 하나요?</sup><br>
+<sup>`docker-compose.yml` 하나에 3개 컨테이너 정의</sup><br>
+<sup>`docker-compose up` 한 줄로 백+프론트+DB 실행됨</sup><br>
+
+---
+
+##### ✅ 질문: 왜 React + Spring Boot + MySQL을 하나의 Docker로 묶어야 할까?
+
+<sup>→ 정답: 이 3개는 독립적인 서버이기 때문에 실행, 연결, 설정을 자동화해서 함께 움직이게 하려는 목적이에요.</sup><br>
+
+<sup>🎯 상황 설명: 개발 환경에서 필요한 구성</sup><br>
+<sup>예를 들어 유미님이 이런 프로젝트를 만든다고 해봐요:</sup><br>
+
 ```yaml
 📦 my-fullstack-project
 ├── backend/      ← Spring Boot (포트 8080)
@@ -241,50 +239,50 @@ Docker로 어떻게 하나요?
 ├── docker-compose.yml
 ```
 
-이때, 개발자가 하나하나 수동으로 실행하면 아래처럼 해야 돼요:
+<sup>이때, 개발자가 하나하나 수동으로 실행하면 아래처럼 해야 돼요:</sup><br>
 
-❌ Docker 없이 하는 방식:
-백엔드: cd backend && ./gradlew bootRun
+<sup>❌ Docker 없이 하는 방식:</sup><br>
+<sup>백엔드: cd backend && ./gradlew bootRun</sup><br>
 
-프론트: cd frontend && npm start
+<sup>프론트: cd frontend && npm start</sup><br>
 
-MySQL: 로컬에 설치해놓고 실행 (버전 맞추기도 어려움)
+<sup>MySQL: 로컬에 설치해놓고 실행 (버전 맞추기도 어려움)</sup><br>
 
-👉 불편하고, 환경이 서로 달라서 연결도 수동
-
----
-
-🟠 상황 4: CI/CD로 자동 배포할 때
-
-예시
-- GitHub에 push하면 자동으로 배포되게 하고 싶을 때
-
-Docker를 쓰는 이유
-- 어떤 환경에서도 **일관된 실행 결과를 보장**
-- 이미지 한 번 만들면 어디서든 실행 가능
-
-도구 예시
-- GitHub Actions → Docker 이미지 만들고 DockerHub에 업로드 → 서버에서 pull & run
+<sup>👉 불편하고, 환경이 서로 달라서 연결도 수동</sup><br>
 
 ---
 
-🟠 상황 5: 플랫폼이 Docker만 지원할 때
+<sup>🟠 상황 4: CI/CD로 자동 배포할 때</sup><br>
 
-예시
-- Google Kubernetes Engine(GKE), AWS ECS 같은 플랫폼은 **Docker 이미지만 받음**
-- jar 파일은 못 쓰고, 컨테이너로 포장된 실행파일만 가능함
+<sup>예시</sup><br>
+<sup>GitHub에 push하면 자동으로 배포되게 하고 싶을 때</sup><br>
+
+<sup>Docker를 쓰는 이유</sup><br>
+<sup>어떤 환경에서도 **일관된 실행 결과를 보장**</sup><br>
+<sup>이미지 한 번 만들면 어디서든 실행 가능</sup><br>
+
+<sup>도구 예시</sup><br>
+<sup>GitHub Actions → Docker 이미지 만들고 DockerHub에 업로드 → 서버에서 pull & run</sup><br>
 
 ---
 
-**✅ Docker가 필요 없는 상황**
+<sup>🟠 상황 5: 플랫폼이 Docker만 지원할 때</sup><br>
 
-🟢 상황 1: 혼자 개발할 때 (로컬 개발)
+<sup>예시</sup><br>
+<sup>Google Kubernetes Engine(GKE), AWS ECS 같은 플랫폼은 **Docker 이미지만 받음**</sup><br> 
+<sup>jar 파일은 못 쓰고, 컨테이너로 포장된 실행파일만 가능함</sup><br>
 
-예시
-- 유미님이 Spring Boot 프로젝트 혼자 만들고 `localhost:8080`에서 확인만 하고 싶을 때
+---
 
-Docker 없이도 가능?
-✔ 가능. 그냥 이렇게만 하면 돼요:
+##### ✅ Docker가 필요 없는 상황
+
+<sup>🟢 상황 1: 혼자 개발할 때 (로컬 개발)</sup><br>
+
+<sup>예시</sup><br>
+<sup>유미님이 Spring Boot 프로젝트 혼자 만들고 `localhost:8080`에서 확인만 하고 싶을 때</sup><br>
+
+<sup>Docker 없이도 가능?</sup><br>
+<sup>✔ 가능. 그냥 이렇게만 하면 돼요:</sup><br>
 
 ```bash
 ./gradlew bootRun
@@ -292,40 +290,41 @@ Docker 없이도 가능?
 java -jar build/libs/myapp.jar
 ```
 
-→ Docker 없이도 완벽하게 개발 가능
+<sup>→ Docker 없이도 완벽하게 개발 가능</sup><br>
 
 ---
 
-🟢 상황 2: Render, Railway, Heroku 등 자동 배포 서비스 이용할 때
+<sup>🟢 상황 2: Render, Railway, Heroku 등 자동 배포 서비스 이용할 때</sup><br>
 
-예시
-- 유미님이 GitHub에 코드를 올려두고
-- Render가 자동으로 빌드해서 jar 실행까지 해주는 경우
+<sup>예시</sup><br>
+<sup>유미님이 GitHub에 코드를 올려두고</sup><br>
+<sup>Render가 자동으로 빌드해서 jar 실행까지 해주는 경우</sup><br>
 
-Docker 없이 가능한 이유?
-- Render 내부에서 알아서 `./gradlew build` 실행하고 `java -jar`도 해줌
-- 우리가 Dockerfile을 써서 컨테이너를 만들 필요 없음
-
----
-
-🟢 상황 3: 정적 웹만 있을 때 (React 결과물, HTML 등)
-
-예시
-- React를 빌드해서 나온 `/build` 폴더에 HTML, JS만 있을 때
-- 또는 HTML/CSS만 있는 페이지
-
-왜 Docker 필요 없음?
-- 이건 웹서버 없이도 GitHub Pages, Netlify 같은 정적 호스팅에 올리면 끝이에요
-
-→ Spring Boot, 서버 실행 필요 X → Docker 필요 없음
+<sup>Docker 없이 가능한 이유?</sup><br>
+<sup>Render 내부에서 알아서 `./gradlew build` 실행하고 `java -jar`도 해줌</sup><br>
+<sup>우리가 Dockerfile을 써서 컨테이너를 만들 필요 없음</sup><br>
 
 ---
 
-### ✅ 2. JSP vs React (서버 vs 클라이언트 렌더링 구조 비교)
+<sup>🟢 상황 3: 정적 웹만 있을 때 (React 결과물, HTML 등)
 
-**🔸 JSP: Server-Side Rendering**
+<sup>예시</sup><br>
+<sup>React를 빌드해서 나온 `/build` 폴더에 HTML, JS만 있을 때</sup><br>
+<sup>또는 HTML/CSS만 있는 페이지</sup><br>
 
-구조 예시
+<sup>왜 Docker 필요 없음?</sup><br>
+<sup>이건 웹서버 없이도 GitHub Pages, Netlify 같은 정적 호스팅에 올리면 끝이에요</sup><br>
+
+<sup>→ Spring Boot, 서버 실행 필요 X → Docker 필요 없음</sup><br>
+
+---
+---
+
+##### ✅ 2. JSP vs React (서버 vs 클라이언트 렌더링 구조 비교)
+
+<sup>🔸 JSP: Server-Side Rendering</sup><br>
+
+<sup> 구조 예시</sup><br>
 
 ```java
 @Controller  // 이 클래스는 클라이언트 요청을 처리하는 Spring MVC 컨트롤러임을 명시
@@ -354,7 +353,7 @@ public class MainController {
 // forEach 반복문 종료
 ```
 
-✔ 서버가 HTML을 생성하고 클라이언트에 전달 (전통적인 방식)
+<sup> ✔ 서버가 HTML을 생성하고 클라이언트에 전달 (전통적인 방식)</sup><br>
 
 ```bash
 1. 사용자가 /list 주소로 접속
@@ -366,9 +365,9 @@ public class MainController {
 
 ---
 
-**🔸 React: Client-Side Rendering (SPA)**
+<sup>🔸 React: Client-Side Rendering (SPA)</sup><br>
 
-구조 예시
+<sup> 구조 예시</sup><br>
 
 ```jsx
 useEffect(() => {
@@ -407,7 +406,7 @@ public class ItemApiController {
 }
 ```
 
-✔ 프론트는 React가, 백은 Spring Boot가 → API로 통신
+<sup> ✔ 프론트는 React가, 백은 Spring Boot가 → API로 통신</sup><br>
 
 ```bash
 1. React가 브라우저에서 /api/items로 GET 요청 보냄
@@ -417,36 +416,36 @@ public class ItemApiController {
 5. 컴포넌트는 새로운 데이터로 다시 렌더링됨
 ```
 
-추가]
-
-* **@Controller**는 뷰 이름(JSP, HTML)을 반환하는 컨트롤러
-* return 값은 "파일 이름"으로 인식돼서 뷰 리졸버가 JSP를 찾아감
-* **@ResponseBody**는 return 값이 **그대로 HTTP 응답 본문(body)**에 들어가게 함
-* 즉, return "Hello!"는 HTML 화면이 아니라 그냥 문자열 출력함
-* **직렬화**는 Java 객체 → JSON 문자열로 변환함
-* **컴포넌트**는 화면(UI)을 구성하는 "작고 독립적인 조각"
-* 화면을 여러 조각으로 나눠서, 각 조각을 컴포넌트라는 단위로 개발함
-* 마치 HTML 요소(예: <header>, <footer>, <nav>)처럼, 하지만 기능 + 스타일 + 로직까지 포함된 블록임
-* **렌더링**은 "컴포넌트를 화면에 그리는 과정"
-* 즉, 컴포넌트 코드를 보고 그걸 브라우저가 이해해서 화면에 HTML로 보여주는 것
+<sup> 추가]
+<sup> **@Controller**는 뷰 이름(JSP, HTML)을 반환하는 컨트롤러
+<sup> return 값은 "파일 이름"으로 인식돼서 뷰 리졸버가 JSP를 찾아감
+<sup> **@ResponseBody**는 return 값이 **그대로 HTTP 응답 본문(body)**에 들어가게 함
+<sup> 즉, return "Hello!"는 HTML 화면이 아니라 그냥 문자열 출력함
+<sup> **직렬화**는 Java 객체 → JSON 문자열로 변환함
+<sup> **컴포넌트**는 화면(UI)을 구성하는 "작고 독립적인 조각"
+<sup> 화면을 여러 조각으로 나눠서, 각 조각을 컴포넌트라는 단위로 개발함
+<sup> 마치 HTML 요소(예: <header>, <footer>, <nav>)처럼, 하지만 기능 + 스타일 + 로직까지 포함된 블록임
+<sup> **렌더링**은 "컴포넌트를 화면에 그리는 과정"
+<sup> 즉, 컴포넌트 코드를 보고 그걸 브라우저가 이해해서 화면에 HTML로 보여주는 것
   
 ---
 
-**🔸 장단점 비교**
+<sup>🔸 장단점 비교</sup><br>
 
-| 항목 | JSP | React |
-|------|-----|--------|
-| 렌더링 방식 | 서버에서 HTML 생성 | 브라우저에서 JS로 렌더링 |
-| 초기 개발 난이도 | 낮음 | 높음 |
-| 동적 기능 (검색, 클릭 등) | JavaScript 직접 추가 필요 | 매우 쉬움 (내장됨) |
-| SEO 최적화 | 매우 유리 | 따로 설정 필요 |
-| 백엔드 통합 | 자연스러움 (Model) | REST API 필요 |
+<sup>| 항목 | JSP | React |</sup><br>
+<sup>|------|-----|--------|</sup><br>
+<sup>| 렌더링 방식 | 서버에서 HTML 생성 | 브라우저에서 JS로 렌더링 |</sup><br>
+<sup>| 초기 개발 난이도 | 낮음 | 높음 |</sup><br>
+<sup>| 동적 기능 (검색, 클릭 등) | JavaScript 직접 추가 필요 | 매우 쉬움 (내장됨) |</sup><br>
+<sup>| SEO 최적화 | 매우 유리 | 따로 설정 필요 |</sup><br>
+<sup>| 백엔드 통합 | 자연스러움 (Model) | REST API 필요 |</sup><br>
 
 ---
+---
 
-### ✅ 3. JPA란? MyBatis와의 차이 & 코드 예시
+##### ✅ 3. JPA란? MyBatis와의 차이 & 코드 예시
 
-### 🔸 MyBatis 구조
+<sup>🔸 MyBatis 구조**</sup><br>
 
 ```xml
 <select id="findAll" resultType="RealEstate">
@@ -454,117 +453,204 @@ public class ItemApiController {
 </select>
 ```
 
-→ SQL 직접 작성 → 비즈니스 로직과 분리 어려움, 유지보수 비용 증가
+<sup>→ SQL 직접 작성 → 비즈니스 로직과 분리 어려움, 유지보수 비용 증가</sup><br>
 
 ---
 
-### 🔸 JPA 구조 (ORM)
+<sup>🔸 JPA 구조 (ORM)</sup><br>
 
-#### Entity 클래스
+<sup>Entity 클래스
+
 ```java
-@Entity
+@Entity  // 이 클래스는 DB 테이블로 쓰겠다고 JPA에 알려주는 어노테이션
 public class RealEstate {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id  // 기본 키(Primary Key) 설정
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동 증가 설정 (MySQL auto_increment)
     private Long id;
-    private String name;
-    private String address;
+
+    private String name;    // 부동산 이름 → DB의 name 컬럼
+    private String address; // 주소 → DB의 address 컬럼
 }
 ```
 
-#### Repository 인터페이스
+<sup>왜 @Entity를 써야 해?
+
+<sup>이 클래스가 DB의 테이블로 자동 생성되거나 연결되게 해주기 위해서예요.
+<sup>@Entity가 없으면 JPA는 이게 그냥 자바 클래스인지 DB랑 연결할 클래스인지 몰라요.
+
+<sup>왜 @Id를 써야 해?
+
+<sup>테이블의 **기본키(Primary Key)**가 뭔지를 지정해야 insert/update가 가능해요.
+
+<sup>Repository 인터페이스
+
 ```java
 public interface RealEstateRepository extends JpaRepository<RealEstate, Long> {}
 ```
 
-#### 컨트롤러 사용
-```java
-@Autowired
-RealEstateRepository repository;
+<sup>JpaRepository<엔티티 클래스, 기본키 타입>을 상속하면, 아래와 같은 기능을 자동으로 쓸 수 있어요:
 
-@GetMapping("/save")
-public String save() {
-    RealEstate house = new RealEstate();
-    house.setName("서울집");
-    house.setAddress("강남구");
-    repository.save(house); // insert 자동 수행
-    return "index";
+```java
+repository.save(객체);          // insert or update
+repository.findAll();          // SELECT * FROM 테이블
+repository.findById(id);       // SELECT ... WHERE id=?
+repository.deleteById(id);     // DELETE FROM ...
+```
+
+<sup>왜 이렇게 나눴냐?
+<sup>DB 접근 코드(SQL 같은 것)를 다 여기서 하게 해서
+<sup>Controller에서는 DB 코드 없이 로직만 쓰게 하려고!
+
+<sup>컨트롤러 사용
+
+```
+@Controller
+public class RealEstateController {
+
+    @Autowired
+    RealEstateRepository repository;
+
+    @GetMapping("/save")
+    public String save() {
+        RealEstate house = new RealEstate();
+        house.setName("서울 아파트");
+        house.setAddress("강남구");
+        repository.save(house);  // 진짜 DB에 저장됨
+        return "index";
+    }
 }
 ```
 
----
-
-### 🔸 장단점 비교
-
-| 항목 | JPA | MyBatis |
-|------|-----|---------|
-| 쿼리 작성 | 자동 (CRUD 제공) | 수동 작성 |
-| 개발 속도 | 빠름 | 느림 (XML 따로 관리) |
-| 복잡한 쿼리 | 불편 (JPQL, QueryDSL) | 자유롭고 강력 |
-| 유지보수 | 쉬움 | 어려움 |
-
-→ CRUD만 한다면 **JPA가 간결하고 빠름**
+<sup>✔ 여기는 오직 "서울 아파트를 저장하자"는 행위만 담당
 
 ---
+---
 
-## ✅ 4. Lombok: 반복 코드 제거
+##### ✅ 4. Lombok: 반복 코드 제거
 
-### 🔸 전통적 방식
+<sup>✅ 질문: Lombok이 뭔데?
+
+<sup>Lombok은 자바 코드에서 반복되는 getter, setter, 생성자 코드를 자동으로 만들어주는 도구예요.
+<sup>직접 쓰지 않아도, 컴파일할 때 자동으로 만들어줌
+
+<sup>🟥 ❌ Lombok 없이: (순수 Java)**
+
 ```java
 public class RealEstate {
     private String name;
+    
+    // 생성자
+    public RealEstate() {}
+
+    // getter
+    public String getName() {
+        return name;
+    }
+
+    // setter
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+```
+<sup>✔ 이걸 쓰면 이름을 가져오거나 바꿀 때 이렇게 써야 해요:
+
+```java
+RealEstate r = new RealEstate();
+r.setName("서울집");             // 값 넣기
+System.out.println(r.getName()); // 값 꺼내기
+```
+
+<sup>✅ Lombok 쓰면 이렇게 짧아져요**
+
+```java
+@Getter                // getter 자동 생성
+@Setter                // setter 자동 생성
+@NoArgsConstructor     // 기본 생성자 자동 생성
+public class RealEstate {
+    private String name;
+}
+```
+<sup>이렇게만 써도, 실제로는 다음 코드가 컴파일할 때 자동으로 생김:
+
+```java
+public class RealEstate {
+    private String name;
+
+    public RealEstate() {}
+
     public String getName() { return name; }
+
     public void setName(String name) { this.name = name; }
 }
 ```
 
-### 🔸 Lombok 사용
+<sup>✔ 내가 직접 쓰지 않아도 컴파일할 때 자동으로 추가됨
+<sup>→ 코드가 훨씬 짧아지고 깔끔해져요
+
+```bash
+@Getter, @Setter를 붙이면,
+getter/setter 메서드를 직접 쓰지 않아도,
+마치 있는 것처럼 객체.get필드명() / 객체.set필드명() 사용이 가능합니다.
+```
+---
+
+<sup>🔹 기본 생성자: @NoArgsConstructor
 ```java
-@Getter
-@Setter
 @NoArgsConstructor
 public class RealEstate {
     private String name;
 }
 ```
+<sup>✔ 이 어노테이션은 이 코드를 자동 생성해요:
 
-### 🔸 장점
-- 코드 짧아지고 가독성 상승
-- 컴파일 시 getter/setter 자동 생성됨
-
-| 어노테이션 | 기능 |
-|------------|------|
-| `@Getter`, `@Setter` | getter/setter 생성 |
-| `@NoArgsConstructor` | 기본 생성자 |
-| `@AllArgsConstructor` | 모든 필드 생성자 |
-| `@Data` | getter/setter, equals, toString 등 전체 포함 |
-
----
-
-## ✅ 5. 어노테이션이란? Spring Boot와의 관계
-
-### 🔸 정의
-> 어노테이션(Annotation)은 클래스나 메서드에 부가 정보를 부여해서 프레임워크가 그 정보를 기반으로 동작하게 만드는 문법
-
----
-
-### 🔸 Spring의 주요 어노테이션 역할
-
-| 어노테이션 | 설명 | 역할 |
-|------------|------|------|
-| `@Controller` | MVC 컨트롤러 | 요청을 JSP로 전달 |
-| `@RestController` | JSON 반환 | API 응답 컨트롤러 |
-| `@Entity` | DB 테이블 매핑 | ORM 연결 |
-| `@Repository` | DAO 선언 | 예외 처리 등 자동화 |
-| `@Service` | 비즈니스 로직 | 트랜잭션 처리 등 |
-| `@Autowired` | DI (의존성 주입) | 객체 자동 연결 |
-
----
-
-### 🔸 Spring Boot에서는 어노테이션의 힘이 더 커짐
 ```java
-@SpringBootApplication // 3가지 어노테이션 결합
-→ @Configuration + @ComponentScan + @EnableAutoConfiguration
+public RealEstate() {
+    // 아무 필드도 받지 않는 기본 생성자
+}
+```
+<sup>✅ 사용 예
+```java
+RealEstate r = new RealEstate(); // 가능!
+r.setName("서울집");
 ```
 
-→ Spring Boot는 어노테이션을 통해 모든 설정을 자동화합니다.
+<sup>🔹 전체 필드 생성자: @AllArgsConstructor
+```java
+@AllArgsConstructor
+public class RealEstate {
+    private String name;
+}
+```
+<sup>✔ 이건 이 코드를 자동 생성해요:
+
+```
+java
+public RealEstate(String name) {
+    this.name = name;
+}
+```
+
+<sup>✅ 사용 예
+```java
+RealEstate r = new RealEstate("서울집"); // 필드 하나를 한 번에 세팅 가능
+```
+
+<sup>🔹 “전체 자동 생성” = @Data 어노테이션
+
+```java
+@Data
+public class RealEstate {
+    private String name;
+}
+```
+<sup>→ 이 한 줄은 아래 전부를 자동으로 만듭니다:
+
+<sup>| 어노테이션               | 자동 생성되는 메서드                          |
+<sup>|--------------------------|----------------------------------------------|
+<sup>| `@Getter`                | `get필드명()`                                |
+<sup>| `@Setter`                | `set필드명(값)`                              |
+<sup>| `@ToString`              | `toString()`                                 |
+<sup>| `@EqualsAndHashCode`     | `equals(Object o)`, `hashCode()`             |
+| `@RequiredArgsConstructor` | `생성자(final 필드만 받는)`               |
