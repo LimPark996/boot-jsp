@@ -1,69 +1,10 @@
 ### ✅ 1. 왜 Spring Boot인가? (기존 Spring과 비교)
 
-**🔸 기존 Spring의 문제점 (Spring Framework)**
-
-**🔹 문제 1: 수동 설정 많음**
-
-기존 Spring은 설정 XML이 많아서 진입 장벽이 높아요.
-
-```xml
-<!-- applicationContext.xml -->
-<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-  <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-  ...
-</bean>
-```
-
-**🔹 문제 2: 외부 서버 필요**
-
-Tomcat 같은 WAS를 설치하고 war 배포해야 함 → 번거로움
-
----
-
-**🔸 Spring Boot의 장점**
-
-**✅ 자동 설정**
-
-```java
-@SpringBootApplication
-public class BootJspApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(BootJspApplication.class, args);
-    }
-}
-```
-
-- 이 한 줄로 내장 Tomcat 구동 + ComponentScan + AutoConfig 끝
-- 설정 파일도 `.yml` 하나로 통합
-
-**✅ 내장 WAS (Tomcat)**
-
-`java -jar` 명령만으로 서버가 바로 실행 → 빠른 배포 가능
-
-**✅ 빌드 자동화 (Gradle + Spring Boot Plugin)**
-
-```gradle
-plugins {
-  id 'org.springframework.boot' version '3.2.4'
-}
-```
-
-**✅ 장점 정리**
-
-| 항목 | 기존 Spring | Spring Boot |
-|------|--------------|-------------|
-| 서버 구동 | 외부 Tomcat 필요 | 내장 Tomcat 제공 |
-| 설정 방식 | XML 중심 | Java 코드 & yml |
-| 개발 속도 | 느림 | 빠름 |
-| 자동 구성 | 없음 | 있음 (`@SpringBootApplication`) |
-
----
-
 **✅ 기존 Spring의 문제점 (Spring Framework 기준)**
 
-**🔹 문제 1: 수동 설정이 많다 = 설정을 개발자가 직접 다 해야 함**
+🔹 문제 1: 수동 설정이 많다 = 설정을 개발자가 직접 다 해야 함
 
-**예) DB 연결하려면?**
+예) DB 연결하려면?
 
 기존 Spring에서는 아래와 같이 XML에 **모든 bean과 속성을 직접 정의**해야 했어요.
 
@@ -92,7 +33,7 @@ plugins {
 
 ---
 
-**🔹 문제 2: 외부 WAS 설치 + war 배포 필수**
+🔹 문제 2: 외부 WAS 설치 + war 배포 필수
 
 기존 Spring 프로젝트는 보통 **war 파일로 빌드**해서 **Tomcat에 수동 배포**해야 했어요.
 
@@ -106,9 +47,42 @@ plugins {
 
 ---
 
+**🔹 [질문 1] 외부 WAS 설치 + war 배포가 뭔 뜻인지 모르겠어요**
+
+👉 용어부터 설명할게요:
+- WAS: Web Application Server, 웹 어플리케이션을 실행해주는 서버
+- 대표적인 게 Tomcat (Java 진영에서 거의 기본)
+
+🔸 기존 Spring Framework에서는…
+- Spring 코드만 가지고는 웹서버에 띄울 수 없어요.
+- 따라서 Tomcat 같은 서버를 별도로 설치하고,
+- 거기에 프로젝트를 넣어줘야 합니다.
+
+🔧 실제 작업 순서 (기존 Spring 기준)
+1. Spring 프로젝트 코드를 .war 파일로 만든다 → war = 웹 어플리케이션 압축 파일
+2. 이 war 파일을 Tomcat의 /webapps 폴더에 복사한다.
+3. Tomcat의 server.xml, context.xml 등을 수정해 경로 설정한다.
+4. Tomcat 서버를 수동으로 껐다 켠다. (또는 설정해서 자동 reload)
+
+즉, 서버와 코드가 따로 노는 구조
+
+→ Spring은 코드만 있고, 실행하려면 Tomcat이 따로 있어야 함
+
+🔸 Spring Boot는 어떻게 다르냐?
+- Spring Boot는 tomcat-embed-core 같은 내장 Tomcat 라이브러리를 포함하고 있어서, 코드 안에 서버가 같이 들어 있어요.
+
+- 즉, 별도로 Tomcat을 설치하지 않고도, 바로 실행 가능:
+
+```bash
+java -jar build/libs/myapp.jar
+```
+→ 이 jar 파일은 Spring Boot + Tomcat + 내 코드가 모두 들어 있는 실행 가능 패키지예요.
+
+---
+
 **✅ Spring Boot의 개선점**
 
-**✅ 1. 자동 설정 (Auto Configuration)**
+✅ 1. 자동 설정 (Auto Configuration)
 
 Spring Boot는 `@SpringBootApplication` 어노테이션을 통해 아래의 설정을 자동화합니다.
 
@@ -121,7 +95,7 @@ public class BootJspApplication {
 }
 ```
 
-**이 한 줄로 포함되는 설정들:**
+이 한 줄로 포함되는 설정들:
 
 | 내부 구성 요소 | 설명 |
 |----------------|------|
@@ -131,9 +105,9 @@ public class BootJspApplication {
 
 ---
 
-**예) DB 설정 자동화**
+예) DB 설정 자동화
 
-**application.yml**
+application.yml
 ```yaml
 spring:
   datasource:
@@ -150,12 +124,12 @@ spring:
 
 ---
 
-**✅ 2. 내장 WAS 제공**
+✅ 2. 내장 WAS 제공
 
 Spring Boot는 Tomcat이 **내장 라이브러리**로 포함되어 있기 때문에  
 **외부 Tomcat 설치 없이도 실행 가능**합니다.
 
-**예) `build.gradle`**
+예) `build.gradle`
 
 ```gradle
 dependencies {
@@ -166,7 +140,7 @@ dependencies {
 → 위 한 줄을 넣으면, Spring Boot는 `spring-boot-starter-web`에 포함된  
 `tomcat-embed-core` 등 내장 Tomcat 의존성을 자동 추가합니다.
 
-**실행은 이렇게만 하면 됨:**
+실행은 이렇게만 하면 됨:
 
 ```bash
 ./gradlew bootRun
@@ -187,7 +161,7 @@ java -jar build/libs/myapp.jar
 
 ---
 
-**✅ 3. 빌드 자동화**
+✅ 3. 빌드 자동화
 
 Spring Boot는 Gradle(Maven도 가능)을 이용한 빌드 자동화를 지원하며,  
 `spring-boot-gradle-plugin`을 통해 다음을 제공합니다:
@@ -196,7 +170,8 @@ Spring Boot는 Gradle(Maven도 가능)을 이용한 빌드 자동화를 지원�
 - `bootJar`: 실행 가능한 JAR 생성
 - `bootBuildImage`: 도커 이미지 자동 생성
 
-**Gradle 설정 예시**
+Gradle 설정 예시
+
 ```gradle
 plugins {
     id 'org.springframework.boot' version '3.2.4'
@@ -208,31 +183,160 @@ plugins {
 
 ---
 
-**✅ 요약**
+**✅ Spring Boot에서 Docker 반드시 필요한 상황**
 
-| 구분 | Spring (전통) | Spring Boot |
-|------|---------------|--------------|
-| 설정 방식 | XML, Java 설정 혼용 | Java + yml 파일 중심 |
-| 서버 구성 | Tomcat 외부 설치 | 내장 Tomcat 자동 구동 |
-| 실행 방식 | war → Tomcat 복사 | jar → 바로 실행 |
-| 설정 코드량 | 많음 | 거의 없음 |
-| 빌드 도구 | 수동 빌드 | Gradle/Maven 자동화 지원 |
+🟠 상황 1: 운영 서버에 직접 배포해야 할 때
+
+예시
+- 회사 리눅스 서버에 올려야 한다거나
+- 클라우드(GCP, AWS EC2) 서버에 배포해야 할 때
+
+왜 Docker가 필요함?
+- 내 개발 환경(JDK, 포트 설정 등)을 그대로 묶어서 서버에 보내야 함
+- 서버에 Java가 깔려있는지, 설정이 맞는지 하나하나 확인할 수 없음
+
+어떻게 하나요?
+1. `Dockerfile`을 작성해서
+2. 내 코드를 포함한 실행 환경을 **컨테이너 이미지로 만듦**
+3. 서버에서 `docker run`으로 실행
 
 ---
 
-## ✅ 2. JSP vs React (서버 vs 클라이언트 렌더링 구조 비교)
+🟠 상황 2: 팀원들과 개발 환경을 맞추고 싶을 때
 
-### 🔸 JSP: Server-Side Rendering
+예시
+- 유미님은 Java 17, 팀원은 Java 11 → 빌드 에러
+- 내 PC에는 MySQL 8.0, 다른 팀원은 SQLite → 동작 안 함
 
-#### 구조 예시
+Docker를 쓰면?
+- 팀원이 코드 내려받고 `docker-compose up`만 하면
+- Java 버전, MySQL 버전, 포트 설정까지 완전 똑같아짐  
+→ **환경 통일**, 에러 줄어듦
+
+---
+
+🟠 상황 3: 여러 개의 서비스를 동시에 실행하고 싶을 때
+
+예시
+- Spring Boot 백엔드
+- React 프론트엔드
+- MySQL 데이터베이스  
+→ 이걸 **하나의 프로젝트처럼 동시에 실행하고 싶을 때**
+
+Docker로 어떻게 하나요?
+- `docker-compose.yml` 하나에 3개 컨테이너 정의
+- `docker-compose up` 한 줄로 백+프론트+DB 실행됨
+
+---
+
+✅ 질문: **왜 React + Spring Boot + MySQL을 하나의 Docker로 묶어야 할까?**
+→ 정답: 이 3개는 독립적인 서버이기 때문에 실행, 연결, 설정을 자동화해서 함께 움직이게 하려는 목적이에요.
+
+🎯 상황 설명: 개발 환경에서 필요한 구성
+예를 들어 유미님이 이런 프로젝트를 만든다고 해봐요:
+```yaml
+📦 my-fullstack-project
+├── backend/      ← Spring Boot (포트 8080)
+├── frontend/     ← React (포트 3000)
+├── docker-compose.yml
+```
+
+이때, 개발자가 하나하나 수동으로 실행하면 아래처럼 해야 돼요:
+
+❌ Docker 없이 하는 방식:
+백엔드: cd backend && ./gradlew bootRun
+
+프론트: cd frontend && npm start
+
+MySQL: 로컬에 설치해놓고 실행 (버전 맞추기도 어려움)
+
+👉 불편하고, 환경이 서로 달라서 연결도 수동
+
+---
+
+🟠 상황 4: CI/CD로 자동 배포할 때
+
+예시
+- GitHub에 push하면 자동으로 배포되게 하고 싶을 때
+
+Docker를 쓰는 이유
+- 어떤 환경에서도 **일관된 실행 결과를 보장**
+- 이미지 한 번 만들면 어디서든 실행 가능
+
+도구 예시
+- GitHub Actions → Docker 이미지 만들고 DockerHub에 업로드 → 서버에서 pull & run
+
+---
+
+🟠 상황 5: 플랫폼이 Docker만 지원할 때
+
+예시
+- Google Kubernetes Engine(GKE), AWS ECS 같은 플랫폼은 **Docker 이미지만 받음**
+- jar 파일은 못 쓰고, 컨테이너로 포장된 실행파일만 가능함
+
+---
+
+**✅ Docker가 필요 없는 상황**
+
+🟢 상황 1: 혼자 개발할 때 (로컬 개발)
+
+예시
+- 유미님이 Spring Boot 프로젝트 혼자 만들고 `localhost:8080`에서 확인만 하고 싶을 때
+
+Docker 없이도 가능?
+✔ 가능. 그냥 이렇게만 하면 돼요:
+
+```bash
+./gradlew bootRun
+# 또는
+java -jar build/libs/myapp.jar
+```
+
+→ Docker 없이도 완벽하게 개발 가능
+
+---
+
+🟢 상황 2: Render, Railway, Heroku 등 자동 배포 서비스 이용할 때
+
+예시
+- 유미님이 GitHub에 코드를 올려두고
+- Render가 자동으로 빌드해서 jar 실행까지 해주는 경우
+
+Docker 없이 가능한 이유?
+- Render 내부에서 알아서 `./gradlew build` 실행하고 `java -jar`도 해줌
+- 우리가 Dockerfile을 써서 컨테이너를 만들 필요 없음
+
+---
+
+🟢 상황 3: 정적 웹만 있을 때 (React 결과물, HTML 등)
+
+예시
+- React를 빌드해서 나온 `/build` 폴더에 HTML, JS만 있을 때
+- 또는 HTML/CSS만 있는 페이지
+
+왜 Docker 필요 없음?
+- 이건 웹서버 없이도 GitHub Pages, Netlify 같은 정적 호스팅에 올리면 끝이에요
+
+→ Spring Boot, 서버 실행 필요 X → Docker 필요 없음
+
+---
+
+### ✅ 2. JSP vs React (서버 vs 클라이언트 렌더링 구조 비교)
+
+**🔸 JSP: Server-Side Rendering**
+
+구조 예시
 
 ```java
-@Controller
+@Controller  // 이 클래스는 클라이언트 요청을 처리하는 Spring MVC 컨트롤러임을 명시
 public class MainController {
-    @GetMapping("/list")
+
+    @GetMapping("/list")  // "/list"라는 경로로 GET 요청이 들어오면 아래 메서드 실행
     public String showList(Model model) {
-        model.addAttribute("items", repository.findAll());
-        return "index"; // → /WEB-INF/views/index.jsp
+        // findAll() 메서드를 호출해서 DB에서 모든 아이템을 가져옴 (JPA Repository에서 제공)
+        model.addAttribute("items", repository.findAll());  
+        // 뷰 이름 "index"를 반환 → 설정된 ViewResolver에 의해 "/WEB-INF/views/index.jsp"로 연결됨
+        return "index";
     }
 }
 ```
@@ -240,41 +344,95 @@ public class MainController {
 ```jsp
 <!-- index.jsp -->
 <c:forEach var="item" items="${items}">
+// items="${items}": 컨트롤러에서 model.addAttribute("items", ...)로 전달된 리스트를 받음
+// var="item": 리스트 안의 각각 요소를 item으로 하나씩 꺼냄
   <div>${item.name} - ${item.price}</div>
+// ${item.name}: 객체 item의 name 필드 값 출력
+// ${item.price}: price 필드 값 출력
+// 즉, DB에서 가져온 각 객체의 이름과 가격을 <div> 안에 보여줌
 </c:forEach>
+// forEach 반복문 종료
 ```
 
 ✔ 서버가 HTML을 생성하고 클라이언트에 전달 (전통적인 방식)
 
+```bash
+1. 사용자가 /list 주소로 접속
+2. Spring Boot가 MainController.showList() 실행
+3. repository.findAll()로 DB에서 데이터 가져옴
+4. 데이터를 "items"라는 이름으로 JSP에 전달
+5. JSP에서 <c:forEach>로 하나씩 꺼내서 화면에 출력
+```
+
 ---
 
-### 🔸 React: Client-Side Rendering (SPA)
+**🔸 React: Client-Side Rendering (SPA)**
 
-#### 구조 예시
+구조 예시
 
 ```jsx
 useEffect(() => {
+// React 컴포넌트가 마운트(처음 화면에 렌더링) 될 때 실행되는 코드 블록 시작
+// useEffect는 Side Effect (예: 서버 요청, 타이머 등) 실행용 훅
   fetch("/api/items")
+// 현재 주소 기준으로 /api/items 경로로 GET 요청 보냄
+// 이건 Spring Boot 서버에게 데이터를 달라고 요청하는 것
     .then(res => res.json())
+// 응답(response)을 JSON 형식으로 파싱
+// .json()은 JSON 응답 본문을 JS 객체로 변환함
     .then(data => setItems(data));
+// 변환된 데이터를 setItems()로 저장
+// setItems는 보통 useState()로 정의된 상태 업데이트 함수
+// 이걸 호출하면 화면이 다시 렌더링되며 데이터가 화면에 표시됨
 }, []);
+// []는 의존성 배열이 비어 있으므로 한 번만 실행됨 (컴포넌트 mount 시)
 ```
 
 ```java
 @RestController
+// 이 코드는 "데이터(API)를 반환하는 컨트롤러"예요.
+// 즉, HTML 화면이 아니라 JSON 데이터를 응답으로 주는 컨트롤러입니다.
 public class ItemApiController {
+// Spring Boot에서 요청을 처리하는 클래스 선언
     @GetMapping("/api/items")
+// 클라이언트(예: React)가 /api/items 경로로 GET 요청을 보내면
+// 이 메서드가 실행됨
     public List<Item> getItems() {
+// List<Item> 타입의 데이터를 반환하겠다는 뜻
+// Spring Boot가 이 리스트를 JSON 배열로 자동 변환해줌
         return repository.findAll();
+// repository 객체를 사용해서 DB에서 모든 아이템을 조회함
+// findAll()은 JPA의 기본 메서드로, 전체 레코드를 가져옴
     }
 }
 ```
 
 ✔ 프론트는 React가, 백은 Spring Boot가 → API로 통신
 
+```bash
+1. React가 브라우저에서 /api/items로 GET 요청 보냄
+2. Spring Boot의 ItemApiController.getItems()가 실행됨
+3. DB에서 Item 데이터 목록을 가져와 JSON으로 변환해 응답
+4. React는 그 응답을 받아서 setItems(data)로 상태 저장
+5. 컴포넌트는 새로운 데이터로 다시 렌더링됨
+```
+
+추가]
+
+* **@Controller**는 뷰 이름(JSP, HTML)을 반환하는 컨트롤러
+* return 값은 "파일 이름"으로 인식돼서 뷰 리졸버가 JSP를 찾아감
+* **@ResponseBody**는 return 값이 **그대로 HTTP 응답 본문(body)**에 들어가게 함
+* 즉, return "Hello!"는 HTML 화면이 아니라 그냥 문자열 출력함
+* **직렬화**는 Java 객체 → JSON 문자열로 변환함
+* **컴포넌트**는 화면(UI)을 구성하는 "작고 독립적인 조각"
+* 화면을 여러 조각으로 나눠서, 각 조각을 컴포넌트라는 단위로 개발함
+* 마치 HTML 요소(예: <header>, <footer>, <nav>)처럼, 하지만 기능 + 스타일 + 로직까지 포함된 블록임
+* **렌더링**은 "컴포넌트를 화면에 그리는 과정"
+* 즉, 컴포넌트 코드를 보고 그걸 브라우저가 이해해서 화면에 HTML로 보여주는 것
+  
 ---
 
-### 🔸 장단점 비교
+**🔸 장단점 비교**
 
 | 항목 | JSP | React |
 |------|-----|--------|
@@ -286,15 +444,7 @@ public class ItemApiController {
 
 ---
 
-### 💡 결론
-- 빠른 결과 확인 & 전체 흐름 파악 → JSP
-- 모던 웹, 유지보수, 대규모 시스템 → React
-
-→ 유미님이 초반에 **Spring 흐름을 익히기엔 JSP**, 실무 준비는 React
-
----
-
-## ✅ 3. JPA란? MyBatis와의 차이 & 코드 예시
+### ✅ 3. JPA란? MyBatis와의 차이 & 코드 예시
 
 ### 🔸 MyBatis 구조
 
