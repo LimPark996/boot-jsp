@@ -76,9 +76,9 @@ java -jar build/libs/myapp.jar
 
 ---
 
-##### ✅ Spring Boot의 개선점
+**✅ Spring Boot의 개선점**
 
-<sup>✅ 1. 자동 설정 (Auto Configuration)</sup><br>
+##### ✅ 1. 자동 설정 (Auto Configuration)
 
 <sup>Spring Boot는 `@SpringBootApplication` 어노테이션을 통해 아래의 설정을 자동화합니다.</sup><br>
 
@@ -120,7 +120,7 @@ spring:
 
 ---
 
-<sup>✅ 2. 내장 WAS 제공</sup><br>
+##### ✅ 2. 내장 WAS 제공
 
 <sup>Spring Boot는 Tomcat이 **내장 라이브러리**로 포함되어 있기 때문에</sup><br>
 <sup>**외부 Tomcat 설치 없이도 실행 가능**합니다.</sup><br>
@@ -157,7 +157,7 @@ java -jar build/libs/myapp.jar
 
 ---
 
-<sup>✅ 3. 빌드 자동화</sup><br>
+##### ✅ 3. 빌드 자동화
 
 <sup>Spring Boot는 Gradle(Maven도 가능)을 이용한 빌드 자동화를 지원하며,</sup><br>
 <sup>`spring-boot-gradle-plugin`을 통해 다음을 제공합니다:</sup><br>
@@ -179,9 +179,9 @@ plugins {
 
 ---
 
-##### ✅ Spring Boot에서 Docker 반드시 필요한 상황
+**✅ Spring Boot에서 Docker 반드시 필요한 상황**
 
-<sup>🟠 상황 1: 운영 서버에 직접 배포해야 할 때</sup><br>
+##### 🟠 상황 1: 운영 서버에 직접 배포해야 할 때
 
 <sup>예시</sup><br>
 <sup>회사 리눅스 서버에 올려야 한다거나</sup><br>
@@ -198,7 +198,7 @@ plugins {
 
 ---
 
-<sup>🟠 상황 2: 팀원들과 개발 환경을 맞추고 싶을 때</sup><br>
+##### 🟠 상황 2: 팀원들과 개발 환경을 맞추고 싶을 때
 
 <sup>예시</sup><br>
 <sup>유미님은 Java 17, 팀원은 Java 11 → 빌드 에러</sup><br>
@@ -211,7 +211,7 @@ plugins {
 
 ---
 
-<sup>🟠 상황 3: 여러 개의 서비스를 동시에 실행하고 싶을 때</sup><br>
+##### 🟠 상황 3: 여러 개의 서비스를 동시에 실행하고 싶을 때
 
 <sup>예시</sup><br>
 <sup>Spring Boot 백엔드</sup><br>
