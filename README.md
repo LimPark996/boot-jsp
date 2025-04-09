@@ -416,17 +416,17 @@ public class ItemApiController {
 5. 컴포넌트는 새로운 데이터로 다시 렌더링됨
 ```
 
-<sup> 추가]
-<sup> **@Controller**는 뷰 이름(JSP, HTML)을 반환하는 컨트롤러
-<sup> return 값은 "파일 이름"으로 인식돼서 뷰 리졸버가 JSP를 찾아감
-<sup> **@ResponseBody**는 return 값이 **그대로 HTTP 응답 본문(body)**에 들어가게 함
-<sup> 즉, return "Hello!"는 HTML 화면이 아니라 그냥 문자열 출력함
-<sup> **직렬화**는 Java 객체 → JSON 문자열로 변환함
-<sup> **컴포넌트**는 화면(UI)을 구성하는 "작고 독립적인 조각"
-<sup> 화면을 여러 조각으로 나눠서, 각 조각을 컴포넌트라는 단위로 개발함
-<sup> 마치 HTML 요소(예: <header>, <footer>, <nav>)처럼, 하지만 기능 + 스타일 + 로직까지 포함된 블록임
-<sup> **렌더링**은 "컴포넌트를 화면에 그리는 과정"
-<sup> 즉, 컴포넌트 코드를 보고 그걸 브라우저가 이해해서 화면에 HTML로 보여주는 것
+<sup> 추가]</sup><br>
+<sup> **@Controller**는 뷰 이름(JSP, HTML)을 반환하는 컨트롤러</sup><br>
+<sup> return 값은 "파일 이름"으로 인식돼서 뷰 리졸버가 JSP를 찾아감</sup><br>
+<sup> **@ResponseBody**는 return 값이 **그대로 HTTP 응답 본문(body)**에 들어가게 함</sup><br>
+<sup> 즉, return "Hello!"는 HTML 화면이 아니라 그냥 문자열 출력함</sup><br>
+<sup> **직렬화**는 Java 객체 → JSON 문자열로 변환함</sup><br>
+<sup> **컴포넌트**는 화면(UI)을 구성하는 "작고 독립적인 조각"</sup><br>
+<sup> 화면을 여러 조각으로 나눠서, 각 조각을 컴포넌트라는 단위로 개발함</sup><br>
+<sup> 마치 HTML 요소처럼, 하지만 기능 + 스타일 + 로직까지 포함된 블록임</sup><br>
+<sup> **렌더링**은 "컴포넌트를 화면에 그리는 과정"</sup><br>
+<sup> 즉, 컴포넌트 코드를 보고 그걸 브라우저가 이해해서 화면에 HTML로 보여주는 것</sup><br>
   
 ---
 
@@ -445,7 +445,7 @@ public class ItemApiController {
 
 ##### ✅ 3. JPA란? MyBatis와의 차이 & 코드 예시
 
-<sup>🔸 MyBatis 구조**</sup><br>
+<sup>🔸 MyBatis 구조</sup><br>
 
 ```xml
 <select id="findAll" resultType="RealEstate">
@@ -459,7 +459,7 @@ public class ItemApiController {
 
 <sup>🔸 JPA 구조 (ORM)</sup><br>
 
-<sup>Entity 클래스
+<sup>Entity 클래스</sup><br>
 
 ```java
 @Entity  // 이 클래스는 DB 테이블로 쓰겠다고 JPA에 알려주는 어노테이션
@@ -474,22 +474,22 @@ public class RealEstate {
 }
 ```
 
-<sup>왜 @Entity를 써야 해?
+<sup>왜 @Entity를 써야 해?</sup><br>
 
-<sup>이 클래스가 DB의 테이블로 자동 생성되거나 연결되게 해주기 위해서예요.
-<sup>@Entity가 없으면 JPA는 이게 그냥 자바 클래스인지 DB랑 연결할 클래스인지 몰라요.
+<sup>이 클래스가 DB의 테이블로 자동 생성되거나 연결되게 해주기 위해서예요.</sup><br>
+<sup>@Entity가 없으면 JPA는 이게 그냥 자바 클래스인지 DB랑 연결할 클래스인지 몰라요.</sup><br>
 
-<sup>왜 @Id를 써야 해?
+<sup>왜 @Id를 써야 해?</sup><br>
 
-<sup>테이블의 **기본키(Primary Key)**가 뭔지를 지정해야 insert/update가 가능해요.
+<sup>테이블의 **기본키(Primary Key)**가 뭔지를 지정해야 insert/update가 가능해요.</sup><br>
 
-<sup>Repository 인터페이스
+<sup>Repository 인터페이스</sup><br>
 
 ```java
 public interface RealEstateRepository extends JpaRepository<RealEstate, Long> {}
 ```
 
-<sup>JpaRepository<엔티티 클래스, 기본키 타입>을 상속하면, 아래와 같은 기능을 자동으로 쓸 수 있어요:
+<sup>JpaRepository<엔티티 클래스, 기본키 타입>을 상속하면, 아래와 같은 기능을 자동으로 쓸 수 있어요:</sup><br>
 
 ```java
 repository.save(객체);          // insert or update
@@ -498,11 +498,11 @@ repository.findById(id);       // SELECT ... WHERE id=?
 repository.deleteById(id);     // DELETE FROM ...
 ```
 
-<sup>왜 이렇게 나눴냐?
-<sup>DB 접근 코드(SQL 같은 것)를 다 여기서 하게 해서
-<sup>Controller에서는 DB 코드 없이 로직만 쓰게 하려고!
+<sup>왜 이렇게 나눴냐?</sup><br>
+<sup>DB 접근 코드(SQL 같은 것)를 다 여기서 하게 해서</sup><br>
+<sup>Controller에서는 DB 코드 없이 로직만 쓰게 하려고!</sup><br>
 
-<sup>컨트롤러 사용
+<sup>컨트롤러 사용</sup><br>
 
 ```
 @Controller
@@ -522,19 +522,19 @@ public class RealEstateController {
 }
 ```
 
-<sup>✔ 여기는 오직 "서울 아파트를 저장하자"는 행위만 담당
+<sup>✔ 여기는 오직 "서울 아파트를 저장하자"는 행위만 담당</sup><br>
 
 ---
 ---
 
 ##### ✅ 4. Lombok: 반복 코드 제거
 
-<sup>✅ 질문: Lombok이 뭔데?
+<sup>✅ 질문: Lombok이 뭔데?</sup><br>
 
-<sup>Lombok은 자바 코드에서 반복되는 getter, setter, 생성자 코드를 자동으로 만들어주는 도구예요.
-<sup>직접 쓰지 않아도, 컴파일할 때 자동으로 만들어줌
+<sup>Lombok은 자바 코드에서 반복되는 getter, setter, 생성자 코드를 자동으로 만들어주는 도구예요.</sup><br>
+<sup>직접 쓰지 않아도, 컴파일할 때 자동으로 만들어줌</sup><br>
 
-<sup>🟥 ❌ Lombok 없이: (순수 Java)**
+<sup>🟥 ❌ Lombok 없이: (순수 Java)</sup><br>
 
 ```java
 public class RealEstate {
@@ -554,7 +554,7 @@ public class RealEstate {
     }
 }
 ```
-<sup>✔ 이걸 쓰면 이름을 가져오거나 바꿀 때 이렇게 써야 해요:
+<sup>✔ 이걸 쓰면 이름을 가져오거나 바꿀 때 이렇게 써야 해요:</sup><br>
 
 ```java
 RealEstate r = new RealEstate();
@@ -562,7 +562,7 @@ r.setName("서울집");             // 값 넣기
 System.out.println(r.getName()); // 값 꺼내기
 ```
 
-<sup>✅ Lombok 쓰면 이렇게 짧아져요**
+<sup>✅ Lombok 쓰면 이렇게 짧아져요</sup><br>
 
 ```java
 @Getter                // getter 자동 생성
@@ -572,7 +572,7 @@ public class RealEstate {
     private String name;
 }
 ```
-<sup>이렇게만 써도, 실제로는 다음 코드가 컴파일할 때 자동으로 생김:
+<sup>이렇게만 써도, 실제로는 다음 코드가 컴파일할 때 자동으로 생김:</sup><br>
 
 ```java
 public class RealEstate {
@@ -586,8 +586,8 @@ public class RealEstate {
 }
 ```
 
-<sup>✔ 내가 직접 쓰지 않아도 컴파일할 때 자동으로 추가됨
-<sup>→ 코드가 훨씬 짧아지고 깔끔해져요
+<sup>✔ 내가 직접 쓰지 않아도 컴파일할 때 자동으로 추가됨</sup><br>
+<sup>→ 코드가 훨씬 짧아지고 깔끔해져요</sup><br>
 
 ```bash
 @Getter, @Setter를 붙이면,
@@ -596,34 +596,34 @@ getter/setter 메서드를 직접 쓰지 않아도,
 ```
 ---
 
-<sup>🔹 기본 생성자: @NoArgsConstructor
+<sup>🔹 기본 생성자: @NoArgsConstructor</sup><br>
 ```java
 @NoArgsConstructor
 public class RealEstate {
     private String name;
 }
 ```
-<sup>✔ 이 어노테이션은 이 코드를 자동 생성해요:
+<sup>✔ 이 어노테이션은 이 코드를 자동 생성해요:</sup><br>
 
 ```java
 public RealEstate() {
     // 아무 필드도 받지 않는 기본 생성자
 }
 ```
-<sup>✅ 사용 예
+<sup>✅ 사용 예</sup><br>
 ```java
 RealEstate r = new RealEstate(); // 가능!
 r.setName("서울집");
 ```
 
-<sup>🔹 전체 필드 생성자: @AllArgsConstructor
+<sup>🔹 전체 필드 생성자: @AllArgsConstructor</sup><br>
 ```java
 @AllArgsConstructor
 public class RealEstate {
     private String name;
 }
 ```
-<sup>✔ 이건 이 코드를 자동 생성해요:
+<sup>✔ 이건 이 코드를 자동 생성해요:</sup><br>
 
 ```
 java
@@ -632,12 +632,12 @@ public RealEstate(String name) {
 }
 ```
 
-<sup>✅ 사용 예
+<sup>✅ 사용 예</sup><br>
 ```java
 RealEstate r = new RealEstate("서울집"); // 필드 하나를 한 번에 세팅 가능
 ```
 
-<sup>🔹 “전체 자동 생성” = @Data 어노테이션
+<sup>🔹 “전체 자동 생성” = @Data 어노테이션</sup><br>
 
 ```java
 @Data
@@ -645,12 +645,12 @@ public class RealEstate {
     private String name;
 }
 ```
-<sup>→ 이 한 줄은 아래 전부를 자동으로 만듭니다:
+<sup>→ 이 한 줄은 아래 전부를 자동으로 만듭니다:</sup><br>
 
-<sup>| 어노테이션               | 자동 생성되는 메서드                          |
-<sup>|--------------------------|----------------------------------------------|
-<sup>| `@Getter`                | `get필드명()`                                |
-<sup>| `@Setter`                | `set필드명(값)`                              |
-<sup>| `@ToString`              | `toString()`                                 |
-<sup>| `@EqualsAndHashCode`     | `equals(Object o)`, `hashCode()`             |
-| `@RequiredArgsConstructor` | `생성자(final 필드만 받는)`               |
+<sup>| 어노테이션               | 자동 생성되는 메서드                          |</sup><br>
+<sup>|--------------------------|----------------------------------------------|</sup><br>
+<sup>| `@Getter`                | `get필드명()`                                |</sup><br>
+<sup>| `@Setter`                | `set필드명(값)`                              |</sup><br>
+<sup>| `@ToString`              | `toString()`                                 |</sup><br>
+<sup>| `@EqualsAndHashCode`     | `equals(Object o)`, `hashCode()`             |</sup><br>
+<sup>| `@RequiredArgsConstructor` | `생성자(final 필드만 받는)`               |</sup><br>
